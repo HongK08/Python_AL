@@ -84,7 +84,7 @@ def print_all_friends(g, start):
     #코드의 핵심내용
     while qu:           # 큐에 처리할 사람이 남아 있는 동안
         p = qu.pop(0)   # 큐에서 처리 대상을 한 명 꺼내 // POP(0) <---이새기 중요
-        print(p)        # 이름을 출력하고
+        print(p,d)        # 이름을 출력하고
         for x in g[p]:  # 그의 친구들 중에
             if x not in done:  # 아직 큐에 추가된 적이 없는 사람을
                 qu.append(x)   # 큐에 추가하고
@@ -119,8 +119,116 @@ qu 랑 list집합을 활용하여 for 문 뻉뻉이 돌리면서 추가 pop 반�
 n+1 로 1:1 = 1 / 1:2 = 2 이런식으로 늘려주면 되겠네?
 
 # 친구관계 + 친밀도 계산 해보기
+def print_all_friends(g, start):
+    qu = []
+    done = set()
+    
+    qu.append((start,0)) #튜플 형태로 저장했으니까
+    
+    done.add(start)
+    while qu:
+        (p,d) = qu.pop(0)
+        print(p,d)
+        for x in [p]:
+            if x not in done:
+            
+                qu.append((x, d+1)) #중요함 // Summer의 친밀도 0 즉 그 친구들은 +=1 되는거지 (직접적으로 이어진 1:1 이니까)
+                
+                done.add(x)
 
 
+fr_info ={
+'Summer': ['John', 'Justin', 'Mike'],
+'John': ['Summer', 'Justin'],
+'Justin': ['John', 'Summer', 'Mike', 'May'],
+'Mike': ['Summer', 'Justin'],
+'May': ['Justin', 'Kim'],
+'Kim': ['May'],
+'Tom': ['Jerry'],
+'Jerry': ['Tom']
+}
+print_all_friends(fr_info, 'Summer')
+print()
+print_all_friends(fr_info, 'Jerry')    
+
+#응용한다면?
+    while qu:
+        (p,d) = qu.pop(0)
+        
+        if d<2:
+            print(p,d)
+            
+        for x in [p]:
+            if x not in done:
+                qu.append((x, d+1))
+                done.add(x)
+
+// 이렇게 출력 범위를 지정해버릴수도있음
+
+#정리
+  1. 일단 Tuple을 사용했음 / 값을 서로 대응시켰으니 말이야
+  2. 대충 DBMS배울적에 나온 그 맛임....
+  3. 셀 번호를 지정하여 해당 튜플에서 값을 추출이 가능함 extract
+  4. 튜플을 (()) 하는 이유는 append할때 이미 (start,0) 를 제공했으니 한번 더 덮어버리는 것
+  5. (p,d) = qu.pop(0) <--0 지정 까먹지말기 + 이건 값을 나눠서 각각 저장한다는 뜻임
+
+# 연습문제 div_to_2_TREE // 너비 우선 탐색 BFS =깊이 탐색
+#그래프 탐색: 너비 우선 탐색
+#입력: 그래프 g, 탐색 시작점 start
+#출력: start에서 출발해 연결된 꼭짓점들을 출력
+def bfs(g, start):
+    qu = []# 기억 장소 1: 앞으로 처리해야 할 꼭짓점을 큐에 저장
+    done = set()# 기억 장소 2: 이미 큐에 추가한 꼭짓점들을 집합에 기록(중복 방지)
+
+    qu.append(start) # 시작점을 큐에 넣고 시작
+    done.add(start) # 집합에도 추가
+    while qu: # 큐에 처리할 꼭짓점이 남아있으면
+      p = qu.pop(0) # 큐에서 처리 대상을 꺼내어
+      print(p)  # 꼭짓점 이름을 출력하고
+    for x in g[p]:  # 대상 꼭짓점에 연결된 꼭짓점들 중에
+            if x not in done: # 아직 큐에 추가된 적이 없는 꼭짓점들을
+                qu.append(x)  # 큐에 추가하고
+                done.add(x) # 집합에도 추가
+#그래프 정보
+g = {
+1: [2, 3],
+2: [1, 4, 5],
+3: [1],
+ 4: [2],
+5: [2]
+}
+bfs(g, 1)
+
+# 에서 WWE 하면
+#그래프 탐색: 너비 우선 탐색
+#입력: 그래프 g, 탐색 시작점 start
+#출력: start에서 출발해 연결된 꼭짓점들을 출력
+def bfs(g, start):
+    qu = []# 기억 장소 1: 앞으로 처리해야 할 꼭짓점을 큐에 저장
+    done = set()# 기억 장소 2: 이미 큐에 추가한 꼭짓점들을 집합에 기록(중복 방지)
+
+    qu.append((start,0)) # 시작점을 큐에 넣고 시작
+    done.add(start) # 집합에도 추가
+    while qu: # 큐에 처리할 꼭짓점이 남아있으면
+      (p,d) = qu.pop(0) # 큐에서 처리 대상을 꺼내어
+      print(p,d)  # 꼭짓점 이름을 출력하고
+    for x in g[p]:  # 대상 꼭짓점에 연결된 꼭짓점들 중에
+            if x not in done: # 아직 큐에 추가된 적이 없는 꼭짓점들을
+                qu.append(x)  # 큐에 추가하고
+                done.add(x) # 집합에도 추가
+#그래프 정보
+g = {
+1: [2, 3],
+2: [1, 4, 5],
+3: [1],
+ 4: [2],
+5: [2]
+}
+bfs(g, 1)
+
+얘도 마찬가지로 친밀도가 추가된 버전임 // tuple (()) 절대 까먹지 말자.
+  
+    
 
 
 
